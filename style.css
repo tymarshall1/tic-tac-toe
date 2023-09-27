@@ -22,24 +22,30 @@ body {
   min-height: inherit;
 }
 
-.game-container {
-  display: flex;
-  flex-direction: column;
-
-  text-align: center;
-  width: 50%;
-  gap: 20px;
+.game-area-container {
   padding: 2rem;
   border: 1px solid gray;
   border-radius: 20px;
   min-height: 400px;
+  width: 50%;
 }
 
-.game-container > h1 {
+.hide-screen {
+  display: none;
+}
+
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 20px;
+}
+
+.start-screen > h1 {
   font-size: 4rem;
 }
 
-.game-container > img {
+.start-screen > img {
   height: 550px;
 }
 
@@ -55,10 +61,17 @@ body {
 
 .choose-piece-screen {
   display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: center;
+}
+
+.icon-selection {
+  display: flex;
   gap: 15px;
 }
 
-.choose-piece-screen > img {
+.icon-selection > img {
   flex: 1;
   border: 1px solid black;
   user-select: none;
@@ -68,6 +81,6 @@ body {
   -ms-user-select: none;
 }
 
-.choose-piece-screen > img:hover {
+.icon-selection > img:hover {
   opacity: 0.3;
 }

@@ -8,17 +8,28 @@
   </head>
   <body>
     <div class="site-container">
-      <div class="game-container">
-        <h1>Tic-Tac-Toe</h1>
-        <img src="assets/tic-tac-toe.png" alt="tic-tac-toe" />
-        <div class="game-mode">
-          <button type="button" id="vsPlayer" class="btn">Vs. Player</button>
-          <button type="button" id="vsComputer" class="btn">
-            Vs. Computer
-          </button>
+      <div class="game-area-container">
+        <div id="startScreen" class="start-screen">
+          <h1>Tic-Tac-Toe</h1>
+          <img src="assets/tic-tac-toe.png" alt="tic-tac-toe" />
+          <div class="game-mode">
+            <button type="button" id="vsPlayer" class="btn">Vs. Player</button>
+            <button type="button" id="vsComputer" class="btn">
+              Vs. Computer
+            </button>
+          </div>
+        </div>
+        <div id="selectionScreen" class="hide-screen">
+          <h1>Player One Gets First Choice</h1>
+          <div class="icon-selection">
+            <img id="xIcon" src="assets/x.svg" alt="X" />
+            <img id="oIcon" src="assets/o.svg" alt="O" />
+          </div>
+          <button id="backBtn" class="btn" type="button">Go Back</button>
         </div>
       </div>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>
