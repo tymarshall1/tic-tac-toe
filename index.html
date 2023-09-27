@@ -9,15 +9,12 @@
   <body>
     <div class="site-container">
       <div class="game-area-container">
-        <div id="startScreen" class="start-screen">
+        <div id="startScreen" class="hide-screen">
           <h1>Tic-Tac-Toe</h1>
           <img src="assets/tic-tac-toe.png" alt="tic-tac-toe" />
-          <div class="game-mode">
-            <button type="button" id="vsPlayer" class="btn">Vs. Player</button>
-            <button type="button" id="vsComputer" class="btn">
-              Vs. Computer
-            </button>
-          </div>
+          <button type="button" id="playervsPlayer" class="btn">
+            Versus Another Player
+          </button>
         </div>
         <div id="selectionScreen" class="hide-screen">
           <h1>Player One Gets First Choice</h1>
@@ -27,6 +24,26 @@
           </div>
           <button id="backBtn" class="btn" type="button">Go Back</button>
         </div>
+        <div id="gameScreen" class="game-screen">
+          <div class="game-screen-header">
+            <h2>Turn:</h2>
+            <button class="btn" id="reset">Reset</button>
+          </div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+          <div class="grid-square"></div>
+        </div>
+      </div>
+      <div class="statistics">
+        <div class="statistics-box statistics-box-blue"></div>
+        <div class="statistics-box statistics-box-lightblue"></div>
+        <div class="statistics-box statistics-box-violet"></div>
       </div>
     </div>
 

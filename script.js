@@ -1,10 +1,6 @@
 document
-  .querySelector("#vsPlayer")
-  .addEventListener("click", () => DisplayController.startPlayer());
-
-document
-  .querySelector("#vsComputer")
-  .addEventListener("click", () => DisplayController.startComputer());
+  .querySelector("#playervsPlayer")
+  .addEventListener("click", () => DisplayController.showSelectionScreen());
 
 const gameBoard = (() => {
   const board = ["", "", "", "", "", "", "", "", ""];
@@ -39,39 +35,44 @@ const gameBoard = (() => {
 const DisplayController = (() => {
   const startScreen = document.querySelector("#startScreen");
   const choosePieceScreen = document.querySelector("#selectionScreen");
+  const gameScreen = document.querySelector("#gameScreen");
   let playerOne = null;
   let playerTwo = null;
-
-  const startPlayer = () => {
-    clearScreen(startScreen);
-    showSelectionScreen();
-  };
-
-  const startComputer = () => {
-    clearScreen(startScreen);
-    showSelectionScreen();
-  };
 
   const clearScreen = (screen) => {
     screen.removeAttribute("class");
     screen.classList.add("hide-screen");
   };
 
+  const addScreenClass = (screen, screenClass) => {
+    screen.removeAttribute("class");
+    screen.classList.add(screenClass);
+  };
+
   const showSelectionScreen = () => {
-    choosePieceScreen.removeAttribute("class");
-    choosePieceScreen.classList.add("choose-piece-screen");
+    clearScreen(startScreen);
+    addScreenClass(choosePieceScreen, "choose-piece-screen");
+
     const xIconBtn = document.querySelector("#xIcon");
     const oIconBtn = document.querySelector("#oIcon");
     const backBtn = document.querySelector("#backBtn");
 
     backBtn.addEventListener("click", () => showStartScreen());
-    xIconBtn.addEventListener("click", (e) => setPlayers(e));
+    xIconBtn.addEventListener("click", (e) => {
+      setPlayers(e);
+      showGameScreen();
+    });
     oIconBtn.addEventListener("click", (e) => setPlayers(e));
   };
 
   const showStartScreen = () => {
     clearScreen(choosePieceScreen);
-    startScreen.classList.add("start-screen");
+    addScreenClass(startScreen, "start-screen");
+  };
+
+  const showGameScreen = () => {
+    clearScreen(choosePieceScreen);
+    addScreenClass(gameScreen, "game-screen");
   };
 
   const setPlayers = (e) => {
@@ -83,8 +84,7 @@ const DisplayController = (() => {
   };
 
   return {
-    startPlayer,
-    startComputer,
+    showSelectionScreen,
   };
 })();
 
