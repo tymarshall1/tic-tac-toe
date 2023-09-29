@@ -159,6 +159,7 @@ const DisplayController = (() => {
     addScreenClass(gameScreen, "game-screen");
     showStats();
     updateTurnOnScreen();
+    updatePieceOnStatsHeader();
 
     const gridSquares = document.querySelectorAll(".grid-square");
     gridSquares.forEach((square, index) => {
@@ -243,6 +244,15 @@ const DisplayController = (() => {
       square.removeAttribute("style");
       square.textContent = "";
     });
+  };
+
+  const updatePieceOnStatsHeader = () => {
+    document.querySelector(
+      "#playerOneWinsHeader"
+    ).textContent = `Player One Wins  (${playerOne.getPiece()})`;
+    document.querySelector(
+      "#playerTwoWinsHeader"
+    ).textContent = `Player Two Wins  (${playerTwo.getPiece()})`;
   };
 
   return {
