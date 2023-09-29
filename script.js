@@ -3,7 +3,7 @@ document
   .addEventListener("click", () => DisplayController.showSelectionScreen());
 
 const GameBoard = (() => {
-  const board = ["", "", "", "", "", "", "", "", ""];
+  let board = ["", "", "", "", "", "", "", "", ""];
   let plays = 0;
 
   const getBoard = () => {
@@ -28,7 +28,10 @@ const GameBoard = (() => {
     return plays % 2 === 0 ? "player one" : "player two";
   };
 
-  const resetBoard = () => {};
+  const resetBoard = () => {
+    board = ["", "", "", "", "", "", "", "", ""];
+    plays = 0;
+  };
 
   const checkForWinner = (peice) => {
     //rows
@@ -61,6 +64,7 @@ const GameBoard = (() => {
     getBoard,
     determineTurn,
     checkForWinner,
+    resetBoard,
   };
 })();
 
@@ -101,6 +105,11 @@ const DisplayController = (() => {
     });
   };
 
+  const showStats = () => {
+    const stats = document.querySelector("#stats");
+    addScreenClass(stats, "statistics");
+  };
+
   const showStartScreen = () => {
     clearScreen(choosePieceScreen);
     addScreenClass(startScreen, "start-screen");
@@ -109,6 +118,7 @@ const DisplayController = (() => {
   const showGameScreen = () => {
     clearScreen(choosePieceScreen);
     addScreenClass(gameScreen, "game-screen");
+    showStats();
     updateTurnOnScreen();
 
     const gridSquares = document.querySelectorAll(".grid-square");
@@ -117,8 +127,13 @@ const DisplayController = (() => {
       square.addEventListener("click", () => {
         addPieceToScreen(square);
         updateTurnOnScreen();
-        updateIfWinner(gridSquares);
+        updateIfWinnerOnscreen(gridSquares);
       });
+    });
+
+    document.querySelector("#resetBtn").addEventListener("click", () => {
+      GameBoard.resetBoard();
+      clearGameBoardOnScreen(gridSquares);
     });
   };
 
@@ -133,7 +148,7 @@ const DisplayController = (() => {
     square.textContent = GameBoard.getBoard()[square.id];
   };
 
-  const updateIfWinner = (gridSquares) => {
+  const updateIfWinnerOnscreen = (gridSquares) => {
     let winner = "no winner";
     let turn = GameBoard.determineTurn();
 
@@ -165,6 +180,14 @@ const DisplayController = (() => {
         (playerTwo = PlayerFactory("placerholder", "O")))
       : ((playerOne = PlayerFactory("placeholder", "O")),
         (playerTwo = PlayerFactory("placerholder", "X")));
+  };
+
+  const clearGameBoardOnScreen = (gridSquares) => {
+    updateTurnOnScreen();
+    gridSquares.forEach((square) => {
+      square.removeAttribute("style");
+      square.textContent = "";
+    });
   };
 
   return {
