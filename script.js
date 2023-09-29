@@ -109,40 +109,54 @@ const DisplayController = (() => {
   const showGameScreen = () => {
     clearScreen(choosePieceScreen);
     addScreenClass(gameScreen, "game-screen");
-    let winner = "no winner";
+    updateTurnOnScreen();
 
     const gridSquares = document.querySelectorAll(".grid-square");
-
     gridSquares.forEach((square, index) => {
       square.id = index;
       square.addEventListener("click", () => {
-        const turn = GameBoard.determineTurn();
-        turn === "player one"
-          ? (GameBoard.markBoard(playerOne, square.id),
-            (winner = GameBoard.checkForWinner(playerOne.getPiece())))
-          : (GameBoard.markBoard(playerTwo, square.id),
-            (winner = GameBoard.checkForWinner(playerTwo.getPiece())));
-
-        addPieceToScreen(square, turn, winner, gridSquares);
-
-        console.log(winner);
+        addPieceToScreen(square);
+        updateTurnOnScreen();
+        updateIfWinner(gridSquares);
       });
     });
   };
 
-  const addPieceToScreen = (square, turn, winner, gridSquares) => {
+  const addPieceToScreen = (square) => {
+    if (GameBoard.determineTurn() === "player one") {
+      GameBoard.markBoard(playerOne, square.id);
+      square.style.backgroundColor = "red";
+    } else {
+      GameBoard.markBoard(playerTwo, square.id);
+      square.style.backgroundColor = "blue";
+    }
     square.textContent = GameBoard.getBoard()[square.id];
-    turn === "player one"
-      ? (square.style.backgroundColor = "red")
-      : (square.style.backgroundColor = "blue");
+  };
+
+  const updateIfWinner = (gridSquares) => {
+    let winner = "no winner";
+    let turn = GameBoard.determineTurn();
+
+    turn === "player two"
+      ? (winner = GameBoard.checkForWinner(playerOne.getPiece()))
+      : (winner = GameBoard.checkForWinner(playerTwo.getPiece()));
 
     if (winner === "no winner") return;
     else if (winner === "X wins" || winner === "O wins") {
+      document.querySelector("#turn").textContent = winner;
       gridSquares.forEach((indvSquare) => {
         indvSquare.style.pointerEvents = "none";
         indvSquare.style.opacity = 0.7;
       });
     }
+  };
+
+  const updateTurnOnScreen = () => {
+    const turnHeader = document.querySelector("#turn");
+
+    GameBoard.determineTurn() === "player one"
+      ? (turnHeader.textContent = `Turn: ${playerOne.getPiece()}`)
+      : (turnHeader.textContent = `Turn: ${playerTwo.getPiece()}`);
   };
 
   const setPlayers = (e) => {
