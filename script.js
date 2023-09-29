@@ -6,14 +6,32 @@ const GameBoard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""];
   let plays = 0;
 
+  let winTracker = {
+    xWins: 0,
+    oWins: 0,
+    ties: 0,
+  };
+
   const getBoard = () => {
     return board;
+  };
+
+  const getWinTracker = () => {
+    return winTracker;
   };
 
   const markBoard = (player, index) => {
     if (!isTaken(index)) {
       board[index] = player.getPiece();
       ++plays;
+    }
+  };
+
+  const trackWins = (piece) => {
+    if (piece === "X") {
+      winTracker.xWins++;
+    } else if (piece === "O") {
+      winTracker.oWins++;
     }
   };
 
@@ -35,28 +53,49 @@ const GameBoard = (() => {
 
   const checkForWinner = (peice) => {
     //rows
-    if (board[0] === peice && board[1] === peice && board[2] === peice)
+    if (board[0] === peice && board[1] === peice && board[2] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
-    if (board[3] === peice && board[4] === peice && board[5] === peice)
+    }
+    if (board[3] === peice && board[4] === peice && board[5] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
-    if (board[6] === peice && board[7] === peice && board[8] === peice)
+    }
+    if (board[6] === peice && board[7] === peice && board[8] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
+    }
 
     //colls
-    if (board[0] === peice && board[3] === peice && board[6] === peice)
+    if (board[0] === peice && board[3] === peice && board[6] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
-    if (board[1] === peice && board[4] === peice && board[7] === peice)
+    }
+    if (board[1] === peice && board[4] === peice && board[7] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
-    if (board[2] === peice && board[5] === peice && board[8] === peice)
+    }
+    if (board[2] === peice && board[5] === peice && board[8] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
+    }
 
     //diagonals
-    if (board[0] === peice && board[4] === peice && board[8] === peice)
+    if (board[0] === peice && board[4] === peice && board[8] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
-    if (board[2] === peice && board[4] === peice && board[6] === peice)
+    }
+    if (board[2] === peice && board[4] === peice && board[6] === peice) {
+      trackWins(peice);
       return `${peice} wins`;
+    }
 
-    return "no winner";
+    if (plays === 9) {
+      winTracker.ties++;
+      return "no winner";
+    }
+
+    return "";
   };
 
   return {
@@ -65,6 +104,7 @@ const GameBoard = (() => {
     determineTurn,
     checkForWinner,
     resetBoard,
+    getWinTracker,
   };
 })();
 
@@ -75,7 +115,6 @@ const DisplayController = (() => {
   let playerOne = null;
   let playerTwo = null;
 
-  //could just make this one function called swapScreens
   const clearScreen = (screen) => {
     screen.removeAttribute("class");
     screen.classList.add("hide-screen");
@@ -149,21 +188,37 @@ const DisplayController = (() => {
   };
 
   const updateIfWinnerOnscreen = (gridSquares) => {
-    let winner = "no winner";
+    let winner = "";
     let turn = GameBoard.determineTurn();
+    const winTieObj = GameBoard.getWinTracker();
 
     turn === "player two"
       ? (winner = GameBoard.checkForWinner(playerOne.getPiece()))
       : (winner = GameBoard.checkForWinner(playerTwo.getPiece()));
 
-    if (winner === "no winner") return;
-    else if (winner === "X wins" || winner === "O wins") {
+    if (winner === "no winner") {
+      document.querySelector("#ties").textContent = winTieObj.ties;
+      document.querySelector("#turn").textContent = "Tie!";
+      grayOutBoard(gridSquares);
+      return;
+    } else if (winner === "X wins" || winner === "O wins") {
       document.querySelector("#turn").textContent = winner;
-      gridSquares.forEach((indvSquare) => {
-        indvSquare.style.pointerEvents = "none";
-        indvSquare.style.opacity = 0.7;
-      });
+      grayOutBoard(gridSquares);
+      if (playerOne.getPiece() === "X") {
+        document.querySelector("#playerOneWins").textContent = winTieObj.xWins;
+        document.querySelector("#playerTwoWins").textContent = winTieObj.oWins;
+        return;
+      }
+      document.querySelector("#playerOneWins").textContent = winTieObj.oWins;
+      document.querySelector("#playerTwoWins").textContent = winTieObj.xWins;
     }
+  };
+
+  const grayOutBoard = (gridSquares) => {
+    gridSquares.forEach((indvSquare) => {
+      indvSquare.style.pointerEvents = "none";
+      indvSquare.style.opacity = 0.7;
+    });
   };
 
   const updateTurnOnScreen = () => {
