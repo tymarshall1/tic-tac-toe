@@ -51,6 +51,13 @@ const GameBoard = (() => {
     plays = 0;
   };
 
+  const newGame = () => {
+    resetBoard();
+    winTracker.xWins = 0;
+    winTracker.oWins = 0;
+    winTracker.ties = 0;
+  };
+
   const checkForWinner = (peice) => {
     //rows
     if (board[0] === peice && board[1] === peice && board[2] === peice) {
@@ -105,6 +112,7 @@ const GameBoard = (() => {
     checkForWinner,
     resetBoard,
     getWinTracker,
+    newGame,
   };
 })();
 
@@ -133,7 +141,14 @@ const DisplayController = (() => {
     const oIconBtn = document.querySelector("#oIcon");
     const backBtn = document.querySelector("#backBtn");
 
-    backBtn.addEventListener("click", () => showStartScreen());
+    backBtn.addEventListener("click", (e) => {
+      const iconSelection = document.querySelector(".icon-selection");
+      const newIconSelection = iconSelection.cloneNode(true);
+      choosePieceScreen.replaceChild(newIconSelection, iconSelection);
+
+      showStartScreen();
+    });
+
     xIconBtn.addEventListener("click", (e) => {
       setPlayers(e);
       showGameScreen();
@@ -160,7 +175,6 @@ const DisplayController = (() => {
     showStats();
     updateTurnOnScreen();
     updatePieceOnStatsHeader();
-
     const gridSquares = document.querySelectorAll(".grid-square");
     gridSquares.forEach((square, index) => {
       square.id = index;
