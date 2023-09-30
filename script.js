@@ -24,7 +24,9 @@ const GameBoard = (() => {
     if (!isTaken(index)) {
       board[index] = player.getPiece();
       ++plays;
+      return true;
     }
+    return false;
   };
 
   const trackWins = (piece) => {
@@ -142,6 +144,7 @@ const DisplayController = (() => {
     const backBtn = document.querySelector("#backBtn");
 
     backBtn.addEventListener("click", (e) => {
+      //we need to do this to clear the eventlisteners for when the player vs player btn is clicked after going back to startpage
       const iconSelection = document.querySelector(".icon-selection");
       const newIconSelection = iconSelection.cloneNode(true);
       choosePieceScreen.replaceChild(newIconSelection, iconSelection);
@@ -175,13 +178,19 @@ const DisplayController = (() => {
     showStats();
     updateTurnOnScreen();
     updatePieceOnStatsHeader();
+
     const gridSquares = document.querySelectorAll(".grid-square");
     gridSquares.forEach((square, index) => {
       square.id = index;
+
       square.addEventListener("click", () => {
         addPieceToScreen(square);
         updateTurnOnScreen();
         updateIfWinnerOnscreen(gridSquares);
+      });
+
+      square.addEventListener("mouseover", () => {
+        setHover(square);
       });
     });
 
@@ -191,13 +200,29 @@ const DisplayController = (() => {
     });
   };
 
-  const addPieceToScreen = (square) => {
+  const setHover = (square) => {
     if (GameBoard.determineTurn() === "player one") {
-      GameBoard.markBoard(playerOne, square.id);
-      square.style.backgroundColor = "red";
+      square.classList.add("grid-square-x");
+      square.classList.remove("grid-square-o");
     } else {
-      GameBoard.markBoard(playerTwo, square.id);
-      square.style.backgroundColor = "blue";
+      square.classList.add("grid-square-o");
+      square.classList.remove("grid-square-x");
+    }
+  };
+
+  const addPieceToScreen = (square) => {
+    let marked = false;
+
+    if (GameBoard.determineTurn() === "player one") {
+      marked = GameBoard.markBoard(playerOne, square.id);
+      if (marked) {
+        square.style.backgroundColor = "lightgreen";
+      }
+    } else {
+      marked = GameBoard.markBoard(playerTwo, square.id);
+      if (marked) {
+        square.style.backgroundColor = "blueviolet";
+      }
     }
     square.textContent = GameBoard.getBoard()[square.id];
   };
