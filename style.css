@@ -144,6 +144,7 @@ body {
 .game-screen-controls {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .game-screen-controls > button {
@@ -190,7 +191,13 @@ body {
   background-color: rgb(157, 91, 219);
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1305px) {
+  .game-area-container {
+    width: 75%;
+  }
+}
+
+@media only screen and (max-width: 665px) {
   .game-area-container {
     width: 100%;
   }
