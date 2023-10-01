@@ -53,13 +53,6 @@ const GameBoard = (() => {
     plays = 0;
   };
 
-  const newGame = () => {
-    resetBoard();
-    winTracker.xWins = 0;
-    winTracker.oWins = 0;
-    winTracker.ties = 0;
-  };
-
   const checkForWinner = (peice) => {
     //rows
     if (board[0] === peice && board[1] === peice && board[2] === peice) {
@@ -114,7 +107,6 @@ const GameBoard = (() => {
     checkForWinner,
     resetBoard,
     getWinTracker,
-    newGame,
   };
 })();
 
@@ -143,7 +135,7 @@ const DisplayController = (() => {
     const oIconBtn = document.querySelector("#oIcon");
     const backBtn = document.querySelector("#backBtn");
 
-    backBtn.addEventListener("click", (e) => {
+    backBtn.addEventListener("click", () => {
       //we need to do this to clear the eventlisteners for when the player vs player btn is clicked after going back to startpage
       const iconSelection = document.querySelector(".icon-selection");
       const newIconSelection = iconSelection.cloneNode(true);
@@ -198,6 +190,10 @@ const DisplayController = (() => {
       GameBoard.resetBoard();
       clearGameBoardOnScreen(gridSquares);
     });
+
+    document.querySelector("#quitBtn").addEventListener("click", () => {
+      location.reload();
+    });
   };
 
   const setHover = (square) => {
@@ -221,7 +217,7 @@ const DisplayController = (() => {
     } else {
       marked = GameBoard.markBoard(playerTwo, square.id);
       if (marked) {
-        square.style.backgroundColor = "blueviolet";
+        square.style.backgroundColor = "rgb(157, 91, 219)";
       }
     }
     square.textContent = GameBoard.getBoard()[square.id];
@@ -270,7 +266,7 @@ const DisplayController = (() => {
   };
 
   const setPlayers = (e) => {
-    e.target.alt === "X"
+    e.target.textContent === "X"
       ? ((playerOne = PlayerFactory("placeholder", "X")),
         (playerTwo = PlayerFactory("placerholder", "O")))
       : ((playerOne = PlayerFactory("placeholder", "O")),
